@@ -1,46 +1,64 @@
+// import { Injectable } from '@nestjs/common';
+// import { PrismaClient, Prisma, Blog } from '@prisma/client';
+
+// @Injectable()
+// export class BlogService {
+//   private readonly prisma: PrismaClient;
+
+//   constructor() {
+//     this.prisma = new PrismaClient();
+//   }
+
+//   async getAllBlogs(): Promise<Blog[]> {
+//     return this.prisma.blog.findMany();
+//   }
+
+//   async createBlog(data: Prisma.BlogCreateInput): Promise<Blog> {
+//     return this.prisma.blog.create({ data });
+//   }
+
+//   async getBlogById(blogId: number): Promise<Blog> {
+//     return this.prisma.blog.findUnique({ where: { id: blogId } });
+//   }
+
+//   async updateBlog(blogId: number, data: Prisma.BlogUpdateInput): Promise<Blog> {
+//     return this.prisma.blog.update({ where: { id: blogId }, data });
+//   }
+
+//   async deleteBlog(blogId: number): Promise<Blog> {
+//     return this.prisma.blog.delete({ where: { id: blogId } });
+//   }
+// }
+// export interface Blog {
+//   id: number;
+//   title: string;
+//   content: string;
+// }
 import { Injectable } from '@nestjs/common';
-import { Blog } from './blog.model';
+import { PrismaService } from '../prisma/prisma.service';
+import { Blog, Prisma } from '@prisma/client';
 
 @Injectable()
 export class BlogService {
-  private blogs: Blog[] = [
-    {
-      id: 12,
-      title: 'Hey there',
-      description: 'it is simple description',
-      img: 'some url',
-    },
-  ];
+  constructor(private prisma: PrismaService) {}
 
-  findAll(): Blog[] {
-    return this.blogs;
+  async createBlog(data: Prisma.BlogCreateInput): Promise<Blog> {
+    return this.prisma.blog.create({ data });
   }
 
-  create(blog: Blog): Blog {
-    const newBlog: Blog = { ...blog, id: Date.now() };
-    this.blogs.push(newBlog);
-    return newBlog;
+  async getAllBlogs(): Promise<Blog[]> {
+    return this.prisma.blog.findMany();
   }
 
-  findOne(id: number): Blog {
-    return this.blogs.find((blog) => blog.id === id);
+  async getBlogById(blogId: number): Promise<Blog> {
+    return this.prisma.blog.findUnique({ where: { id: blogId } });
   }
 
-  update(id: number, blog: Blog): Blog {
-    const index = this.blogs.findIndex((blog) => blog.id === id);
-    if (index !== -1) {
-      this.blogs[index] = { ...blog, id };
-      return this.blogs[index];
-    }
-    return null;
+  async updateBlog(blogId: number, data: Prisma.BlogUpdateInput): Promise<Blog> {
+    return this.prisma.blog.update({ where: { id: blogId }, data });
   }
 
-  remove(id: number): boolean {
-    const index = this.blogs.findIndex((blog) => blog.id === id);
-    if (index !== -1) {
-      this.blogs.splice(index, 1);
-      return true;
-    }
-    return false;
+  async deleteBlog(blogId: number): Promise<Blog> {
+    return this.prisma.blog.delete({ where: { id: blogId } });
   }
 }
