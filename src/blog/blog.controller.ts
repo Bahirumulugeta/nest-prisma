@@ -12,12 +12,12 @@ import {
 // Blog service
 import { BlogService } from './blog.service';
 
-// Blog model
-import { Blog, Prisma } from '@prisma/client';
+// Prisma client
+import { Blog } from '@prisma/client';
 
 // Controller decorator with blogs route(endpoint)
 // Is applied to BlogController class
-@Controller('blogs')
+@Controller('api/v1/blogs')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
@@ -30,15 +30,15 @@ export class BlogController {
     return this.blogService.getAllBlogs();
   }
 
-  // FindOne method has an id param and returns single blog
+  // getBlogById method has an id param and returns single blog
   @Get(':id')
-  async getBlogById(@Param('id') blogId: number): Promise<Blog> {
+  async getBlogById(@Param('id') blogId: number): Promise<Blog | null> {
     return this.blogService.getBlogById(blogId);
   }
 
   // Create method has post decorator - accepts blog information as json and return blog object
   @Post()
-  async createBlog(@Body() data: Prisma.BlogCreateInput): Promise<Blog> {
+  async createBlog(@Body() data: Blog): Promise<Blog> {
     return this.blogService.createBlog(data);
   }
 
@@ -51,11 +51,11 @@ export class BlogController {
   @Put(':id')
   async updateBlog(
     @Param('id') blogId: number,
-    @Body() data: Prisma.BlogUpdateInput,
+    @Body() data: Blog,
   ): Promise<Blog> {
     return this.blogService.updateBlog(blogId, data);
   }
-  // Remove method has Delete decorator and returns boolean(true or false)
+  // deleteBLog method has Delete decorator and returns boolean(true or false)
   @Delete(':id')
   async deleteBlog(@Param('id') blogId: number): Promise<Blog> {
     return this.blogService.deleteBlog(blogId);
