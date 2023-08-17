@@ -14,7 +14,7 @@ import { BlogService } from './blog.service';
 
 // Prisma client
 import { Blog } from '@prisma/client';
-
+ 
 // Controller decorator with blogs route(endpoint)
 // Is applied to BlogController class
 @Controller('api/v1/blogs')
