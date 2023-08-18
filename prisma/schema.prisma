@@ -10,7 +10,8 @@ generator client {
 model Blog {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String
+  content   String @db.VarChar(1000)
+  imageUrl  String
   createdAt DateTime @default(now())
   @@map("blogs")
 }
